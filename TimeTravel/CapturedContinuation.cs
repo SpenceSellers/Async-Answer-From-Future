@@ -10,14 +10,15 @@ namespace TimeTravel
 
         public CapturedContinuation(Action continuation)
         {
-            
             _savedContinuation = continuation;
+            // Save the state of the C# async runtime state machine so we can jump back to this point later.
             var (stateMachine, stateField) = GetAsyncStateMachineInternalStateField(continuation);
             _savedStateMachineState = (int) stateField.GetValue(stateMachine);
         }
 
         public void Execute()
         {
+            // Reset the C# async runtime state machine back to how it looked when we first hit the await
             var (stateMachine, stateField) = GetAsyncStateMachineInternalStateField(_savedContinuation);
             stateField.SetValue(stateMachine, _savedStateMachineState);
 

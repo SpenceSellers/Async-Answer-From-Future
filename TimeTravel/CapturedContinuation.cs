@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace TimeTravel
 {
+    /// <summary>
+    /// Represents a point in the program's async execution history that we can jump back to at any time.
+    /// </summary>
     public class CapturedContinuation
     {
         private readonly Action _savedContinuation;
